@@ -71,12 +71,11 @@ public class AuthController extends HttpServlet {
             if(kt){
                 HttpSession session = req.getSession();
                 session.setAttribute("user", anonimus);
-                if (anonimus.getRole().getId() == 1){
+                if (anonimus.getRole().getId() == 1){``
                     resp.sendRedirect("/user");
                 } else if (anonimus.getRole().getId() == 2) {
-                    resp.sendRedirect("/user");
-                }else resp.sendRedirect("/user");
-                resp.sendRedirect("/user");
+                    resp.sendRedirect("/admin");
+                }else resp.sendRedirect("/viewer");
             }else{
                 req.setAttribute("messenger", "User Name or Password is incorrect!! Please try again!");
                 req.getRequestDispatcher("login.jsp").forward(req, resp);
