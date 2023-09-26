@@ -13,12 +13,23 @@
 <div class="container">
   <div class="card container px-6" style="height: 100vh">
     <h3 class="text-center">Management User</h3>
+    <div class="input-group mb-3">
+        <h6>Hello ${client.userName}</h6>
+    </div>
     <c:if test="${message != null}">
       <h6 class="d-none" id="message">${message}</h6>
     </c:if>
     <div>
       <a href="/user?action=create" class="btn btn-primary mb-2">Create</a>
       <a href="/user?action=restore" class="btn btn-info mb-2">Restore</a>
+      <div class="container">
+        <form action="#" method="GET" class="mt-4">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search keyword" id="keyword" name="keyword">
+            <button class="btn btn-primary" type="submit">Search</button>
+          </div>
+        </form>
+      </div>
     </div>
     <table class="table table-striped">
       <tr>

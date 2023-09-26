@@ -23,7 +23,6 @@ public class UserController extends HttpServlet {
     private UserService userService;
     private UserDAO userDAO;
     private RoleDAO roleDAO;
-    private RoleService roleService;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
@@ -50,6 +49,7 @@ public class UserController extends HttpServlet {
                 showList(req, resp);
         }
     }
+
 
     private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int idEdit = Integer.parseInt(req.getParameter("id"));
@@ -101,9 +101,6 @@ public class UserController extends HttpServlet {
             case "update" :
                 edit(req, resp);
                 break;
-//            default:
-//                showList(req, resp);
-//        }
         }
     }
 
@@ -116,11 +113,10 @@ public class UserController extends HttpServlet {
         String dob = req.getParameter("dob");
         String gender = req.getParameter("gender");
         int role = Integer.parseInt(req.getParameter("role"));
-        userDAO.editUser(userService.createUser(lastName, firstName, userName, email, dob, gender, role), id);
+        String password = req.getParameter("password");
+        userDAO.editUser(userService.createUser(lastName, firstName, userName, email, dob, gender, role, password), id);
         resp.sendRedirect("/user?message=Edited!");
-
     }
-
     private void create(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String lastName = req.getParameter("lastName");
         String firstName = req.getParameter("firstName");
@@ -129,10 +125,9 @@ public class UserController extends HttpServlet {
         String dob = req.getParameter("dob");
         String gender = req.getParameter("gender");
         int role = Integer.parseInt(req.getParameter("role"));
-        userDAO.createUser(userService.createUser(lastName, firstName, userName, email, dob, gender, role));
+        String password = req.getParameter("password");
+        userDAO.createUser(userService.createUser(lastName, firstName, userName, email, dob, gender, role, password));
         resp.sendRedirect("/user?message=Created!");
-
-
     }
 
     private void showCreate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -144,7 +139,6 @@ public class UserController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         userService = new UserService();
-        roleService = new RoleService();
         userDAO = new UserDAO();
         roleDAO = new RoleDAO();
 

@@ -5,6 +5,7 @@ import model.Role;
 import model.User;
 import service.RoleService;
 import service.UserService;
+import utils.AppUtils;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class UserDAO extends ConnectionDatabase{
                         resultSet.getString("lastName"), resultSet.getString("userName"),
                         resultSet.getString("email"), LocalDate.parse(resultSet.getString("dob")),
                         roleDAO.findRoleById(resultSet.getInt("roleId")), EGender.valueOf(resultSet.getString("gender")),
-                        Boolean.parseBoolean(resultSet.getString("deleted"))));
+                        Boolean.parseBoolean(resultSet.getString("deleted")), resultSet.getString("password")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -42,7 +43,7 @@ public class UserDAO extends ConnectionDatabase{
 //    }
 
     public void createUser(User user){
-        String ADD_NEW_USER = "INSERT INTO `userdb`.`users` (`firstName`, `lastName`, `userName`, `email`, `doB`, `roleId`, `gender`, `deleted`) VALUES (?, ?, ?, ?, ?, ?, ?,'false');";
+        String ADD_NEW_USER = "INSERT INTO `userdb`.`users` (`firstName`, `lastName`, `userName`, `email`, `doB`, `roleId`, `gender`, `deleted`, `password`) VALUES (?, ?, ?, ?, ?, ?, ?,'false',?);";
         try {
             Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER);
@@ -53,6 +54,7 @@ public class UserDAO extends ConnectionDatabase{
             preparedStatement.setDate(5, Date.valueOf(user.getDoB()));
             preparedStatement.setInt(6, user.getRole().getId());
             preparedStatement.setString(7, String.valueOf(user.getGender()));
+            preparedStatement.setString(8, user.getPassword());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());;
@@ -109,6 +111,7 @@ public class UserDAO extends ConnectionDatabase{
                 user.setRole(roleDAO.findRoleById(resultSet.getInt("roleId")));
                 user.setGender(EGender.valueOf(resultSet.getString("gender")));
                 user.setDeleted(false);
+                user.setPassword(resultSet.getString("password"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -135,5 +138,41 @@ public class UserDAO extends ConnectionDatabase{
             System.out.println(e.getMessage());
         }
 
+    }
+
+    public boolean checkLogin(String userName, String password) {
+        List<User> userList = getAllUser();
+        for (User u: userList) {
+            if(userName.equals(u.getUserName())  && password.equals(u.getPassword())){
+                return true;
+            }
+        }return false;
+    }
+
+    public User getUserByUserName(String userName) {
+            String SELECT_USER_BY_USERNAME = "SELECT * FROM `userdb`.`users` WHERE `userName` = ?";
+        RoleDAO roleDAO = new RoleDAO();
+        User user = new User();
+        Connection connection =getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_USERNAME);
+            preparedStatement.setString(1, userName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setUserName(resultSet.getString("userName"));
+                user.setEmail(resultSet.getString("email"));
+                user.setDoB(LocalDate.parse(resultSet.getString("doB")));
+                user.setRole(roleDAO.findRoleById(resultSet.getInt("roleId")));
+                user.setGender(EGender.valueOf(resultSet.getString("gender")));
+                user.setDeleted(false);
+                user.setPassword(resultSet.getString("password"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return user;
     }
 }

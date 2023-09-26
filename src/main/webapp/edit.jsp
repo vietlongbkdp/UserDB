@@ -40,6 +40,10 @@
                 <label for="dob" class="form-label">Date of Birth</label>
                 <input type="date" class="form-control" id="dob"  name="dob" value="${user.doB}">
             </div>
+            <div class="mb-3" style="display: none">
+                <label for="password" class="form-label">Password</label>
+                <input type="text" class="form-control" id="password"  name="password">
+            </div>
             <div class="mb-3">
                 <label for="gender" class="form-label">Select Gender</label>
                 <select class="form-select" aria-label="Default select example" id="gender" name="gender" >

@@ -12,11 +12,12 @@ public class User {
     private Role roles;
     private EGender gender;
     private boolean deleted;
+    private String password;
 
     public User() {
     }
 
-    public User(int id, String firstName, String lastName, String userName, String email, LocalDate doB, Role roles, EGender gender, boolean deleted) {
+    public User(int id, String firstName, String lastName, String userName, String email, LocalDate doB, Role roles, EGender gender, boolean deleted, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,8 +27,9 @@ public class User {
         this.roles = roles;
         this.gender = gender;
         this.deleted = deleted;
+        this.password= password;
     }
-    public User(int id, String firstName, String lastName, String userName, String email, LocalDate doB, Role roles, EGender gender) {
+    public User(int id, String firstName, String lastName, String userName, String email, LocalDate doB, Role roles, EGender gender, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,6 +38,7 @@ public class User {
         this.doB = doB;
         this.roles = roles;
         this.gender = gender;
+        this.password = password;
     }
     public int getId() {
         return id;
@@ -107,5 +110,13 @@ public class User {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

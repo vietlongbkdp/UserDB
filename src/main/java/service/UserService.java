@@ -5,6 +5,7 @@ import DAO.UserDAO;
 import model.EGender;
 import model.Role;
 import model.User;
+import utils.AppUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class UserService {
     public List<User> getAllUser(){
         return userDAO.getAllUser();
     }
-    public User createUser(String lastName, String firstName, String userName, String email, String dob, String gender, int role){
+    public User createUser(String lastName, String firstName, String userName, String email, String dob, String gender, int role, String password){
         User user = new User();
         user.setLastName(lastName);
         user.setFirstName(firstName);
@@ -28,6 +29,7 @@ public class UserService {
         user.setDoB(LocalDate.parse(dob));
         user.setGender(EGender.valueOf(gender));
         user.setRole(roleDAO.findRoleById(role));
+        user.setPassword(password);
         user.setDeleted(false);
         return user;
     }
